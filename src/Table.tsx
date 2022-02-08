@@ -22,7 +22,7 @@ function Table() {
                 <th scope="col" className={thClass}>Ini</th>
                 <th scope="col" className={thClass}>Treffer</th>
                 <th scope="col" className={thClass}>Blutung</th>
-                <th scope="col" className={thClass}>Malus</th>
+                <th scope="col" className={thClass}>Bonus/Malus</th>
                 <th scope="col" className={thClass}>Muss parieren</th>
                 <th scope="col" className={thClass}>Keine Parade</th>
                 <th scope="col" className={thClass}>Benommen</th>
@@ -38,16 +38,16 @@ function Table() {
             <tr className={trClassEven}>
                 <td className={tdClass}><Remove/> Roana</td>
                 <td className={tdClass}>18</td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
+                <td className={tdClass}><Counter minValue={0}/></td>
+                <td className={tdClass}><Counter minValue={0}/></td>
+                <td className={tdClass}><Counter invertColors={true}/></td>
+                <td className={tdClass}><Counter minValue={0}/></td>
+                <td className={tdClass}><Counter minValue={0}/></td>
+                <td className={tdClass}><Counter minValue={0}/></td>
                 <td className={tdClass}><Checkbox/></td>
                 <td className={tdClass}><Checkbox/></td>
                 <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Counter/></td>
+                <td className={tdClass}><Counter minValue={0}/></td>
                 <td className={tdClass}><Checkbox/></td>
                 <td className={tdClass}><textarea/></td>
             </tr>
