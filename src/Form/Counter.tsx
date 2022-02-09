@@ -1,6 +1,7 @@
 import "./Counter.css"
 import {useRef, useState} from "react";
 import PropTypes from 'prop-types';
+import {Character} from "../Model/Character";
 
 function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGER, invertColors = false, useBigSteps = false}) {
     const counterInput: React.MutableRefObject<HTMLInputElement|null> = useRef(null);
@@ -9,11 +10,12 @@ function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGE
     const [inputShown, setInputShown] = useState(false);
 
     function setValue(update: (current: number) => number) {
-        //TODO fix double increase/decrease
         setEntity((value: object): object => {
+            // clone to prevent side effects from double update
+            const clone = Object.assign({}, value)
             // @ts-ignore
-            value[property] = update(value[property]);
-            return Object.assign({}, value);
+            clone[property] = update(clone[property]);
+            return clone;
         });
     }
 
@@ -62,7 +64,7 @@ function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGE
                     <span className="m-auto text-2xl font-thin">−</span>
                 </button>
                 <input type="number" ref={counterInput}
-                       className="outline-none focus:outline-none text-center w-full bg-amber-100 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-amber-700  outline-none border-0 focus:ring-0"
+                       className="outline-none focus:outline-none text-center w-full bg-amber-100 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-amber-700  outline-none border-0 focus:ring-0 px-0 text-sm"
                        value={entity[property]} onClick={showButtons} onChange={handleChange} onKeyPress={handleKeyPress} onBlur={hideButtons}/>
                 <button
                     className="bg-amber-100 text-amber-600 hover:text-amber-700 hover:bg-amber-200 h-full w-20 rounded-r cursor-pointer"

@@ -2,14 +2,7 @@ import {WoundType} from "./WoundType";
 
 export class Modifier
 {
-    public value: number;
-    public rounds: number;
+    public value: number = 0;
+    public rounds: number = 0;
     public woundType?: WoundType;
-
-    constructor(value: number, rounds: number, woundType?: WoundType) {
-        this.value = value;
-        this.rounds = rounds;
-        this.woundType = woundType;
-    }
-
 }

@@ -12,9 +12,6 @@ import {WoundType} from "./Model/WoundType";
 function Table() {
 
     const [entity, setEntity] = useState(new Character("Grobert"))
-    entity.boniOrMali = [new Modifier(100, 2), new Modifier(-20, 3, WoundType.Muscle)]
-    entity.parryWithMali = [new Modifier(-25, 1)]
-
 
     const thClass = "py-3 px-6 text-xs font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400";
     const tableClass = "min-w-full divide-y divide-amber-200 table-fixed dark:divide-amber-700 w-full";
@@ -53,7 +50,7 @@ function Table() {
                 <td className={tdClass}>14</td>
                 <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
                 <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
-                <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"boniOrMali"}/></td>
+                <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"boniOrMali"} useWoundType={true}/></td>
                 <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"parryWithMali"}/></td>
                 <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"noParryRounds"} minValue={0}/></td>
                 <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"dizzyRounds"} minValue={0}/></td>
