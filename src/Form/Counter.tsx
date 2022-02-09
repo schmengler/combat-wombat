@@ -2,12 +2,20 @@ import "./Counter.css"
 import {useRef, useState} from "react";
 import PropTypes from 'prop-types';
 
-function Counter({minValue = Number.MIN_SAFE_INTEGER, invertColors = false}) {
+function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGER, invertColors = false, useBigSteps = false}) {
     const counterInput: React.MutableRefObject<HTMLInputElement|null> = useRef(null);
     const buttonInputs: React.MutableRefObject<HTMLDivElement|null> = useRef(null);
     const inputContainer: React.MutableRefObject<HTMLDivElement|null> = useRef(null);
-    const [value, setValue] = useState(0);
     const [inputShown, setInputShown] = useState(false);
+
+    function setValue(update: (current: number) => number) {
+        //TODO fix double increase/decrease
+        setEntity((value: object): object => {
+            // @ts-ignore
+            value[property] = update(value[property]);
+            return Object.assign({}, value);
+        });
+    }
 
     const increase = (by: number = 1) => () => {
         setValue((current: number) => Math.max(minValue, current + by));
@@ -19,6 +27,9 @@ function Counter({minValue = Number.MIN_SAFE_INTEGER, invertColors = false}) {
         showButtons();
         (counterInput.current as HTMLElement).focus();
     };
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(() => Math.max(minValue, Number.parseInt(event.target.value)));
+    }
 
     const showButtons = () => setInputShown(true);
     const hideButtons = function () {
@@ -35,7 +46,6 @@ function Counter({minValue = Number.MIN_SAFE_INTEGER, invertColors = false}) {
         }, 10);
     };
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(Math.max(minValue, Number.parseInt(event.target.value)))
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         return event.key == 'Enter' && (event.target as HTMLElement).blur();
     }
@@ -53,13 +63,13 @@ function Counter({minValue = Number.MIN_SAFE_INTEGER, invertColors = false}) {
                 </button>
                 <input type="number" ref={counterInput}
                        className="outline-none focus:outline-none text-center w-full bg-amber-100 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-amber-700  outline-none"
-                       value={value} onClick={showButtons} onChange={handleChange} onKeyPress={handleKeyPress} onBlur={hideButtons}/>
+                       value={entity[property]} onClick={showButtons} onChange={handleChange} onKeyPress={handleKeyPress} onBlur={hideButtons}/>
                 <button
                     className="bg-amber-100 text-amber-600 hover:text-amber-700 hover:bg-amber-200 h-full w-20 rounded-r cursor-pointer"
                     onClick={increase()} onBlur={hideButtons}>
                     <span className="m-auto text-2xl font-thin">+</span>
                 </button>
-                <div ref={buttonInputs} hidden={!inputShown} className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow"}>
+                <div ref={buttonInputs} hidden={!inputShown || !useBigSteps} className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow"}>
                     <button
                         className={invertColors ? cssGreenButton : cssRedButton}
                         onClick={increase(10)} onBlur={hideButtons}
@@ -88,7 +98,10 @@ function Counter({minValue = Number.MIN_SAFE_INTEGER, invertColors = false}) {
 }
 
 Counter.propTypes = {
-    minValue: PropTypes.number
+    property: PropTypes.string,
+    minValue: PropTypes.number,
+    invertColors: PropTypes.bool,
+    useBigSteps: PropTypes.bool,
 }
 
 export default Counter

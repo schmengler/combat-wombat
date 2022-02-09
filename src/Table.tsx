@@ -1,10 +1,20 @@
 import Counter from "./Form/Counter"
+import MultiCounter from "./Form/MultiCounter";
 import Checkbox from "./Form/Checkbox"
 import Remove from "./Form/Remove"
 import Add from "./Form/Add"
+import {Character} from "./Model/Character";
+import {useState} from "react";
+import {Modifier} from "./Model/Modifier";
+import {WoundType} from "./Model/WoundType";
 
 
 function Table() {
+
+    const [entity, setEntity] = useState(new Character("Grobert"))
+    entity.boniOrMali = [new Modifier(100, 2), new Modifier(-20, 3, WoundType.Muscle)]
+    entity.parryWithMali = [new Modifier(-25, 1)]
+
 
     const thClass = "py-3 px-6 text-xs font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400";
     const tableClass = "min-w-full divide-y divide-amber-200 table-fixed dark:divide-amber-700 w-full";
@@ -14,6 +24,7 @@ function Table() {
     const trClassOdd = "hover:bg-orange-50 dark:hover:bg-amber-700";
     const trClassEven = "bg-amber-50 hover:bg-orange-50 dark:hover:bg-amber-700";
     const trCurrent = " bg-green-50";
+
     return (
         <table className={tableClass}>
             <thead className={theadClass}>
@@ -21,11 +32,11 @@ function Table() {
                 <th scope="col" className={thClass}>Chara</th>
                 <th scope="col" className={thClass}>Ini</th>
                 <th scope="col" className={thClass}>Treffer</th>
-                <th scope="col" className={thClass}>Blutung</th>
-                <th scope="col" className={thClass}>Bonus/Malus</th>
-                <th scope="col" className={thClass}>Muss parieren</th>
-                <th scope="col" className={thClass}>Keine Parade</th>
-                <th scope="col" className={thClass}>Benommen</th>
+                <th scope="col" className={thClass}>Blutung / Runde</th>
+                <th scope="col" className={thClass}>Boni/Mali</th>
+                <th scope="col" className={thClass}>Muss mit ___ parieren</th>
+                <th scope="col" className={thClass}>Runden Keine Parade</th>
+                <th scope="col" className={thClass}>Runden Benommen</th>
                 <th scope="col" className={thClass}>Entwaffnet</th>
                 <th scope="col" className={thClass}>Am Boden</th>
                 <th scope="col" className={thClass}>Bewusstlos</th>
@@ -36,68 +47,26 @@ function Table() {
             </thead>
             <tbody className={tbodyClass}>
             <tr className={trClassEven}>
-                <td className={tdClass}><Remove/> Roana</td>
-                <td className={tdClass}>18</td>
-                <td className={tdClass}><Counter minValue={0}/></td>
-                <td className={tdClass}><Counter minValue={0}/></td>
-                <td className={tdClass}><Counter invertColors={true}/></td>
-                <td className={tdClass}><Counter minValue={0}/></td>
-                <td className={tdClass}><Counter minValue={0}/></td>
-                <td className={tdClass}><Counter minValue={0}/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Counter minValue={0}/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><textarea/></td>
             </tr>
             <tr className={trClassOdd}>
-                <td className={tdClass}><Remove/> Grobert</td>
+                <td className={tdClass}><Remove/> {entity.name} ({entity.hits})</td>
                 <td className={tdClass}>14</td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
+                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
+                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
+                <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"boniOrMali"}/></td>
+                <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"parryWithMali"}/></td>
+                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"noParryRounds"} minValue={0}/></td>
+                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"dizzyRounds"} minValue={0}/></td>
                 <td className={tdClass}><Checkbox/></td>
                 <td className={tdClass}><Checkbox/></td>
                 <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Counter/></td>
+                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"diesInRounds"} minValue={0}/></td>
                 <td className={tdClass}><Checkbox/></td>
                 <td className={tdClass}><textarea/></td>
             </tr>
             <tr className={trClassEven + trCurrent}>
-                <td className={tdClass}><Remove/> Tysko</td>
-                <td className={tdClass}>12</td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><textarea/></td>
             </tr>
             <tr className={trClassOdd}>
-                <td className={tdClass}><Remove/> Boran</td>
-                <td className={tdClass}>10</td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Counter/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><textarea/></td>
             </tr>
 
             <tr className={trClassOdd}>
