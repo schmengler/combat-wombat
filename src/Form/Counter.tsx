@@ -1,14 +1,19 @@
 import "./Counter.css"
 import {useRef, useState} from "react";
 import PropTypes from 'prop-types';
-import {Character} from "../Model/Character";
 
+// @ts-ignore
 function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGER, invertColors = false, useBigSteps = false}) {
     const counterInput: React.MutableRefObject<HTMLInputElement|null> = useRef(null);
     const buttonInputs: React.MutableRefObject<HTMLDivElement|null> = useRef(null);
     const inputContainer: React.MutableRefObject<HTMLDivElement|null> = useRef(null);
     const [inputShown, setInputShown] = useState(false);
 
+    /**
+     * Sets state of the entity by cloning it and use the "update" callback on the current property
+     *
+     * @param update
+     */
     function setValue(update: (current: number) => number) {
         setEntity((value: object): object => {
             // clone to prevent side effects from double update

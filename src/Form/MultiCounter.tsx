@@ -5,6 +5,7 @@ import {Modifier} from "../Model/Modifier";
 import Counter from "./Counter";
 import {WoundType} from "../Model/WoundType";
 
+// @ts-ignore
 function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGER, invertColors = false, useWoundType = false}) {
     const [detailsShown, setDetailsShown] = useState(false);
 
@@ -20,9 +21,10 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
                 return value;
             }
             // clone to prevent side effects from double update
-            const clone = Object.assign(new Character(""), value)
+            const clone = Object.assign(new Character("", 0), value)
             const modifier = Object.assign(new Modifier(), newModifier);
             setNewModifier(new Modifier());
+            // @ts-ignore
             clone[property] = [...clone[property], modifier];
             setDetailsShown(false);
             return clone;
@@ -30,7 +32,8 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
     };
     const handleRemoveModifier = (modifier: Modifier) => () => setEntity((value: Character) => {
         // clone to prevent side effects from double update
-        const clone = Object.assign(new Character(""), value)
+        const clone = Object.assign(new Character("", 0), value)
+        // @ts-ignore
         clone[property] = clone[property].filter((item: Modifier) => item !== modifier)
         return clone;
     });

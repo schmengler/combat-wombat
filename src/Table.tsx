@@ -1,6 +1,7 @@
 import Counter from "./Form/Counter"
 import MultiCounter from "./Form/MultiCounter";
 import Checkbox from "./Form/Checkbox"
+import Text from "./Form/Text"
 import Remove from "./Form/Remove"
 import Add from "./Form/Add"
 import {Character} from "./Model/Character";
@@ -11,7 +12,7 @@ import {WoundType} from "./Model/WoundType";
 
 function Table() {
 
-    const [entity, setEntity] = useState(new Character("Grobert"))
+    const [entity, setEntity] = useState(new Character("Grobert", 11))
 
     const thClass = "py-3 px-6 text-xs font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400";
     const tableClass = "min-w-full divide-y divide-amber-200 table-fixed dark:divide-amber-700 w-full";
@@ -46,8 +47,8 @@ function Table() {
             <tr className={trClassEven}>
             </tr>
             <tr className={trClassOdd}>
-                <td className={tdClass}><Remove/> {entity.name} ({entity.hits})</td>
-                <td className={tdClass}>14</td>
+                <td className={tdClass}><Remove/> {entity.name} ({entity.ini})</td>
+                <td className={tdClass}><Text entity={entity} setEntity={setEntity} property={"ini"} /></td>
                 <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
                 <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
                 <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>

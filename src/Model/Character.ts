@@ -4,6 +4,8 @@ export class Character
 {
     public name: string;
 
+    public ini: number;
+
     public hits: number = 0;
 
     public bleeding: number = 0;
@@ -18,7 +20,8 @@ export class Character
 
     public diesInRounds: number = 0;
 
-    constructor(name: string) {
+    constructor(name: string, ini: number) {
         this.name = name;
+        this.ini = ini;
     }
 }
