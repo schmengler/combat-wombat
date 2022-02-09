@@ -62,7 +62,7 @@ function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGE
                     <span className="m-auto text-2xl font-thin">−</span>
                 </button>
                 <input type="number" ref={counterInput}
-                       className="outline-none focus:outline-none text-center w-full bg-amber-100 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-amber-700  outline-none"
+                       className="outline-none focus:outline-none text-center w-full bg-amber-100 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-amber-700  outline-none border-0 focus:ring-0"
                        value={entity[property]} onClick={showButtons} onChange={handleChange} onKeyPress={handleKeyPress} onBlur={hideButtons}/>
                 <button
                     className="bg-amber-100 text-amber-600 hover:text-amber-700 hover:bg-amber-200 h-full w-20 rounded-r cursor-pointer"
