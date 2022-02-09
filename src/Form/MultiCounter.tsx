@@ -14,17 +14,20 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
         value.woundType = WoundType[event.target.value as keyof typeof WoundType];
         return Object.assign(Object.create(Object.getPrototypeOf(value)), value);
     });
-    const handleAddModifier = (event: React.MouseEvent<HTMLButtonElement>) => setEntity((value: Character) => {
-        if (newModifier.isEmpty()) {
-            return value;
-        }
-        // clone to prevent side effects from double update
-        const clone = Object.assign(new Character(""), value)
-        const modifier = Object.assign(new Modifier(), newModifier);
-        setNewModifier(new Modifier());
-        clone[property] = [...clone[property], modifier];
-        return clone;
-    });
+    const handleAddModifier = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setEntity((value: Character) => {
+            if (newModifier.isEmpty()) {
+                return value;
+            }
+            // clone to prevent side effects from double update
+            const clone = Object.assign(new Character(""), value)
+            const modifier = Object.assign(new Modifier(), newModifier);
+            setNewModifier(new Modifier());
+            clone[property] = [...clone[property], modifier];
+            setDetailsShown(false);
+            return clone;
+        });
+    };
     const handleRemoveModifier = (modifier: Modifier) => () => setEntity((value: Character) => {
         // clone to prevent side effects from double update
         const clone = Object.assign(new Character(""), value)
@@ -34,9 +37,9 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
 
     return (
         <div className="h-10 w-20 relative cursor-help">
-            <span className={"text-2xl"}  onClick={() => setDetailsShown((shown) => !shown)}>
+            <div className={"h-full text-2xl"}  onClick={() => setDetailsShown((shown) => !shown)}>
                 {entity[property].reduce((prev: number, current: Modifier) => prev + current.value, 0)}
-            </span>
+            </div>
             <div hidden={!detailsShown} className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow"}>
                 <ol>
                     {entity[property].map((modifier: Modifier) => (
@@ -65,7 +68,7 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
                     </svg>
                 </button>
                 <strong>Runden</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} />
-                <strong>Bonus/Malus</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"value"} useBigSteps={true} />
+                <strong>Bonus/Malus</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"value"} useBigSteps={true} invertColors={invertColors} />
                 {useWoundType && (
                     <fieldset>
                         {Object.entries(WoundType).map((entry) =>

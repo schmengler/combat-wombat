@@ -6,7 +6,8 @@ export class Modifier {
     public woundType: WoundType = WoundType.None;
 
     isEmpty(): boolean {
-        return this.value == 0 || this.rounds == 0;
+        // value = 0 is allowed, e.g. for "must parry"
+        return this.rounds == 0;
     }
 
 }
