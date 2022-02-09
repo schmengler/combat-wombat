@@ -12,7 +12,7 @@ function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGE
     function setValue(update: (current: number) => number) {
         setEntity((value: object): object => {
             // clone to prevent side effects from double update
-            const clone = Object.assign({}, value)
+            const clone = Object.assign(Object.create(Object.getPrototypeOf(value)), value)
             // @ts-ignore
             clone[property] = update(clone[property]);
             return clone;

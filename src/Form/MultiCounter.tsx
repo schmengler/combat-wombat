@@ -8,16 +8,20 @@ import {WoundType} from "../Model/WoundType";
 function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGER, invertColors = false, useWoundType = false}) {
     const [detailsShown, setDetailsShown] = useState(false);
 
-    const [newModifier, setNewModifier] = useState(new Modifier(0, 0));
+    const [newModifier, setNewModifier] = useState(new Modifier());
 
     const handleChangeWoundType = (event: React.ChangeEvent<HTMLInputElement>) => setNewModifier((value: Modifier) => {
         value.woundType = WoundType[event.target.value as keyof typeof WoundType];
-        return Object.assign({}, value);
+        return Object.assign(Object.create(Object.getPrototypeOf(value)), value);
     });
     const handleAddModifier = (event: React.MouseEvent<HTMLButtonElement>) => setEntity((value: Character) => {
+        if (newModifier.isEmpty()) {
+            return value;
+        }
         // clone to prevent side effects from double update
         const clone = Object.assign(new Character(""), value)
         const modifier = Object.assign(new Modifier(), newModifier);
+        setNewModifier(new Modifier());
         clone[property] = [...clone[property], modifier];
         return clone;
     });
@@ -57,8 +61,7 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                          xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M5 11l7-7 7 7M5 19l7-7 7 7"></path>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"/>
                     </svg>
                 </button>
                 <strong>Runden</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} />
