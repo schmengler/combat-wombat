@@ -3,12 +3,16 @@ import {Character} from "./Model/Character";
 // @ts-ignore
 function Actions({characters, setCharacters, currentId, setCurrentId}) {
 
-    // from CharacterRow, should be extracted
+    // from CharacterRow, common parts should be extracted
     const updateCharacterOnTurn = (characterId: number) => {
         setCharacters((prev: Character[]) => {
             const index = prev.findIndex((c: Character) => c.id == characterId)
             const clone = [...prev];
             clone[index] = clone[index].turn();
+            setCurrentId(characterId);
+            if (!clone[index].canAct()) {
+                updateCharacterOnTurn(clone[(index + 1) % clone.length].id);
+            }
             return clone;
         })
     }
@@ -28,7 +32,6 @@ function Actions({characters, setCharacters, currentId, setCurrentId}) {
         }
         const currentIndex: number = characters.findIndex((c: Character) => c.id == currentId);
         const nextIndex: number = (currentIndex + 1) % characters.length;
-        setCurrentId(characters[nextIndex].id);
         updateCharacterOnTurn(characters[nextIndex].id)
     }
 

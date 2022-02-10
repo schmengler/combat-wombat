@@ -23,7 +23,13 @@ export class Character {
 
     public diesInRounds: number = 0;
 
-    public isDead: boolean = false;
+    public onGround: boolean = false;
+
+    public disarmed: boolean = false;
+
+    public conciousless: boolean = false;
+
+    public dead: boolean = false;
 
     constructor(name: string, ini: number) {
         this.id = Character.nextId++;
@@ -54,10 +60,13 @@ export class Character {
         clone.parryWithMali = turnModifiers(clone.parryWithMali);
 
         if (clone.diesInRounds == 0 && this.diesInRounds > 0) {
-            //TODO handle state in Checkbox component
-            clone.isDead = true;
+            clone.dead = true;
         }
 
         return clone;
+    }
+
+    canAct(): boolean {
+        return !this.dead && !this.conciousless;
     }
 }
