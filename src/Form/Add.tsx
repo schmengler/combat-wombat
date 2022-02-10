@@ -16,7 +16,7 @@ function Add({setCharacters}) {
         const count: number = Number.parseInt(matches[1]) || 1;
         const name: string = matches[2];
         const ini: number = Number.parseInt(matches[3]) || 0;
-        const added : Character[] = Array.from({length: count}, (x, i) => new Character(name + ' ' + (i + 1), ini));
+        const added : Character[] = Array.from({length: count}, (x, i) => new Character(name + (count > 1 ? ' ' + (i + 1) : ''), ini));
         setCharacters((prev: Character[]) => [...prev, ...added]);
         inputElement.value = '';
     }

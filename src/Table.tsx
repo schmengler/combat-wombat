@@ -1,29 +1,16 @@
-import Counter from "./Form/Counter"
-import MultiCounter from "./Form/MultiCounter";
-import Checkbox from "./Form/Checkbox"
-import Text from "./Form/Text"
-import Remove from "./Form/Remove"
 import Add from "./Form/Add"
 import {Character} from "./Model/Character";
-import {useState} from "react";
-import {Modifier} from "./Model/Modifier";
-import {WoundType} from "./Model/WoundType";
 import CharacterRow from "./Form/CharacterRow";
-import SortCharacters from "./Form/SortCharacters";
 
 
-function Table() {
-
-    const [characters, setCharacters] = useState([new Character("Grobert", 11), new Character("Roana", 12)])
-    // const [characters, setCharacters] = useState([])
+// @ts-ignore
+function Table({characters, setCharacters, currentId}) {
 
     const thClass = "py-3 px-6 text-xs font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400";
     const tableClass = "min-w-full divide-y divide-amber-200 table-fixed dark:divide-amber-700 w-full";
     const theadClass = "bg-amber-100 dark:bg-amber-700";
     const tbodyClass = "bg-white divide-y divide-amber-200 dark:bg-amber-800 dark:divide-amber-700";
     const tdClass = "py-4 px-6 text-sm font-medium text-amber-900 whitespace-nowrap dark:text-white";
-    const trClassOdd = "hover:bg-orange-50 dark:hover:bg-amber-700";
-    const trClassEven = "bg-amber-50 hover:bg-orange-50 dark:hover:bg-amber-700";
 
     characters.sort((a: Character, b:Character): number => b.ini - a.ini);
 
@@ -50,9 +37,9 @@ function Table() {
             <tbody className={tbodyClass}>
 
             {characters.map((character: Character, index) => (
-                <CharacterRow key={character.id} isCurrent={false} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
+                <CharacterRow key={character.id} isCurrent={currentId == character.id} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
 
-            <tr className={trClassOdd}>
+            <tr>
                 <td className={tdClass} colSpan={14}><Add setCharacters={setCharacters}/></td>
             </tr>
             </tbody>

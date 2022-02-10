@@ -1,7 +1,10 @@
 import Table from './Table';
 import Actions from './Actions'
+import {useState} from "react";
 
 function App() {
+    const [currentId, setCurrentId] = useState(null);
+    const [characters, setCharacters] = useState([])
 
     return (
         <div className="App">
@@ -11,8 +14,8 @@ function App() {
                     Combat Wombat <sup>for Rolemaster</sup>
                 </h1>
             </header>
-            <Table/>
-            <Actions />
+            <Table characters={characters} setCharacters={setCharacters} currentId={currentId}/>
+            <Actions characters={characters} currentId={currentId} setCurrentId={setCurrentId}/>
         </div>
     )
 }
