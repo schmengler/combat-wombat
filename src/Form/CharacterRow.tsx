@@ -4,6 +4,7 @@ import Counter from "./Counter";
 import MultiCounter from "./MultiCounter";
 import Checkbox from "./Checkbox";
 import {Character} from "../Model/Character";
+import Textarea from "./Textarea";
 
 // @ts-ignore
 function CharacterRow({tdClass, isEven, isCurrent, characters, setCharacters, characterId}) {
@@ -42,7 +43,7 @@ function CharacterRow({tdClass, isEven, isCurrent, characters, setCharacters, ch
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"conciousless"}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"diesInRounds"} minValue={0}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"dead"}/></td>
-            <td className={tdClass}><textarea className={"w-full"}/></td>
+            <td className={tdClass}><Textarea entity={entity} setEntity={setEntity} property={"notes"} /></td>
         </tr>
     );
 }

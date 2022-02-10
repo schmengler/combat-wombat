@@ -31,6 +31,8 @@ export class Character {
 
     public dead: boolean = false;
 
+    public notes: string = '';
+
     constructor(name: string, ini: number) {
         this.id = Character.nextId++;
         this.name = name;

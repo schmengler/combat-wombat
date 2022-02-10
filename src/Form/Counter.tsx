@@ -60,7 +60,7 @@ function Counter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGE
 
     return (
         <div className="custom-number-input h-full w-full">
-            <div ref={inputContainer} className="flex flex-col h-full w-full rounded-lg relative bg-transparent mt-1 Zitems-center">
+            <div ref={inputContainer} className="flex flex-col h-full w-full rounded-lg relative bg-transparent mt-1 items-center">
                 <button
                     className="bg-amber-100 text-amber-600 hover:text-amber-700 hover:bg-amber-200 h-full w-10 rounded-r cursor-pointer"
                     onClick={increase()} onBlur={hideButtons}>
