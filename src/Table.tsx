@@ -8,11 +8,14 @@ import {Character} from "./Model/Character";
 import {useState} from "react";
 import {Modifier} from "./Model/Modifier";
 import {WoundType} from "./Model/WoundType";
+import CharacterRow from "./Form/CharacterRow";
+import SortCharacters from "./Form/SortCharacters";
 
 
 function Table() {
 
-    const [entity, setEntity] = useState(new Character("Grobert", 11))
+    const [characters, setCharacters] = useState([new Character("Grobert", 11), new Character("Roana", 12)])
+    // const [characters, setCharacters] = useState([])
 
     const thClass = "py-3 px-6 text-xs font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400";
     const tableClass = "min-w-full divide-y divide-amber-200 table-fixed dark:divide-amber-700 w-full";
@@ -21,7 +24,8 @@ function Table() {
     const tdClass = "py-4 px-6 text-sm font-medium text-amber-900 whitespace-nowrap dark:text-white";
     const trClassOdd = "hover:bg-orange-50 dark:hover:bg-amber-700";
     const trClassEven = "bg-amber-50 hover:bg-orange-50 dark:hover:bg-amber-700";
-    const trCurrent = " bg-green-50";
+
+    characters.sort((a: Character, b:Character): number => b.ini - a.ini);
 
     return (
         <table className={tableClass}>
@@ -44,32 +48,12 @@ function Table() {
             </tr>
             </thead>
             <tbody className={tbodyClass}>
-            <tr className={trClassEven}>
-            </tr>
-            <tr className={trClassOdd}>
-                <td className={tdClass}><Remove/> {entity.name} ({entity.ini})</td>
-                <td className={tdClass}><Text entity={entity} setEntity={setEntity} property={"ini"} /></td>
-                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
-                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
-                <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>
-                <td className={tdClass}><MultiCounter entity={entity} setEntity={setEntity} property={"parryWithMali"}/></td>
-                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"noParryRounds"} minValue={0}/></td>
-                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"dizzyRounds"} minValue={0}/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"diesInRounds"} minValue={0}/></td>
-                <td className={tdClass}><Checkbox/></td>
-                <td className={tdClass}><textarea/></td>
-            </tr>
-            <tr className={trClassEven + trCurrent}>
-            </tr>
-            <tr className={trClassOdd}>
-            </tr>
+
+            {characters.map((character: Character, index) => (
+                <CharacterRow key={character.id} isCurrent={false} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
 
             <tr className={trClassOdd}>
-                <td className={tdClass}><Add/> <input type="text"/></td>
-                <td className={tdClass} colSpan={13}> </td>
+                <td className={tdClass} colSpan={14}><Add setCharacters={setCharacters}/></td>
             </tr>
             </tbody>
         </table>
