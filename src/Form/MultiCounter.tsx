@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import {useState} from "react";
 import PropTypes from 'prop-types';
 import {Character} from "../Model/Character";
 import {Modifier} from "../Model/Modifier";
@@ -6,7 +6,7 @@ import Counter from "./Counter";
 import {WoundType} from "../Model/WoundType";
 
 // @ts-ignore
-function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGER, invertColors = false, useWoundType = false}) {
+function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_INTEGER, invertColors = true, useWoundType = false}) {
     const [detailsShown, setDetailsShown] = useState(false);
 
     const [newModifier, setNewModifier] = useState(new Modifier());
@@ -39,11 +39,11 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
     });
 
     return (
-        <div className="h-10 w-20 relative cursor-help">
-            <div className={"h-full text-2xl"}  onClick={() => setDetailsShown((shown) => !shown)}>
+        <div className="h-full w-full relative cursor-help">
+            <div className={"h-full w-full text-2xl"}  onClick={() => setDetailsShown((shown) => !shown)}>
                 {entity[property].reduce((prev: number, current: Modifier) => prev + current.value, 0)}
             </div>
-            <div hidden={!detailsShown} className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow"}>
+            <div hidden={!detailsShown} className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow text-left"}>
                 <ol>
                     {entity[property].map((modifier: Modifier) => (
                         <li className={"text-xl"}>
@@ -70,7 +70,7 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"/>
                     </svg>
                 </button>
-                <strong>Runden</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} />
+                <strong>Runden</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} minValue={0} />
                 <strong>Bonus/Malus</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"value"} useBigSteps={true} invertColors={invertColors} />
                 {useWoundType && (
                     <fieldset>

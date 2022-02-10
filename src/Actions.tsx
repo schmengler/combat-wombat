@@ -1,7 +1,7 @@
 import {Character} from "./Model/Character";
 
 // @ts-ignore
-function Actions({characters, setCharacters, currentId, setCurrentId}) {
+function Actions({characters, setCharacters, currentId, setCurrentId, characterTable}) {
 
     // from CharacterRow, common parts should be extracted
     const updateCharacterOnTurn = (characterId: number) => {
@@ -14,7 +14,12 @@ function Actions({characters, setCharacters, currentId, setCurrentId}) {
                 updateCharacterOnTurn(clone[(index + 1) % clone.length].id);
             }
             return clone;
+        });
+        characterTable.current.querySelector('tr[data-character-id="'+characterId+'"]').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
         })
+
     }
 
     function getCurrent(): Character|null

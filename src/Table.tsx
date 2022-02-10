@@ -1,19 +1,24 @@
 import Add from "./Form/Add"
 import {Character} from "./Model/Character";
 import CharacterRow from "./Form/CharacterRow";
+import Actions from "./Actions";
+import {useRef} from "react";
 
 
 // @ts-ignore
-function Table({characters, setCharacters, currentId}) {
+function Table({characters, setCharacters, currentId, setCurrentId}) {
 
-    const thClass = "py-3 px-6 text-xs font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400";
     const tableClass = "min-w-full divide-y divide-amber-200 table-fixed dark:divide-amber-700 w-full";
-    const theadClass = "bg-amber-100 dark:bg-amber-700";
+    const theadClass = "bg-amber-100 dark:bg-amber-700 w-full z-10 sticky top-0 drop-shadow";
+    const thClass = "py-3 text-xs font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400 sm:-rotate-90 xl:rotate-0 sm:px-1 xl:px-6";
     const tbodyClass = "bg-white divide-y divide-amber-200 dark:bg-amber-800 dark:divide-amber-700";
-    const tdClass = "py-4 px-6 text-sm font-medium text-amber-900 whitespace-nowrap dark:text-white";
+    const tfootClass = "bottom-0 sticky bg-white/80";
+
+    const characterTable = useRef(null);
+
+    const tdClass = "py-1 text-sm font-medium text-amber-900 whitespace-nowrap dark:text-white sm:px-1 xl:px-6 align-middle text-center border-dotted border-x border-amber-600";
 
     characters.sort((a: Character, b:Character): number => b.ini - a.ini);
-
     return (
         <table className={tableClass}>
             <thead className={theadClass}>
@@ -34,15 +39,22 @@ function Table({characters, setCharacters, currentId}) {
                 <th scope="col" className={thClass}>Notizen</th>
             </tr>
             </thead>
-            <tbody className={tbodyClass}>
+            <tbody className={tbodyClass} ref={characterTable}>
 
             {characters.map((character: Character, index: number) => (
-                <CharacterRow key={character.id} isCurrent={currentId == character.id} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
+                <CharacterRow tdClass={tdClass} key={character.id} isCurrent={currentId == character.id} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
 
-            <tr>
-                <td className={tdClass} colSpan={14}><Add setCharacters={setCharacters}/></td>
-            </tr>
             </tbody>
+            <tfoot className={tfootClass}>
+                <tr>
+                    <td className={tdClass} colSpan={7}>
+                        <Add setCharacters={setCharacters}/>
+                    </td>
+                    <td className={tdClass} colSpan={7}>
+                        <Actions characters={characters} characterTable={characterTable} setCharacters={setCharacters} currentId={currentId} setCurrentId={setCurrentId}/>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     )
 }
