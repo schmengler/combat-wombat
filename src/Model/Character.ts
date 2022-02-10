@@ -28,4 +28,11 @@ export class Character
         this.name = name;
         this.ini = ini;
     }
+
+    turn()
+    {
+        const clone = Object.assign(new Character('', 0), this);
+        clone.hits += clone.bleeding;
+        return clone;
+    }
 }

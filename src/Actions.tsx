@@ -1,6 +1,16 @@
 import {Character} from "./Model/Character";
 
-function Actions({characters, currentId, setCurrentId}) {
+// @ts-ignore
+function Actions({characters, setCharacters, currentId, setCurrentId}) {
+
+    // from CharacterRow, should be extracted
+    const updateCharacterOnTurn = (characterId: number) => {
+        setCharacters((prev: Character[]) => {
+            const index = prev.findIndex((c: Character) => c.id == characterId)
+            prev[index] = prev[index].turn();
+            return [...prev];
+        })
+    }
 
     function getCurrent(): Character|null
     {
@@ -18,6 +28,7 @@ function Actions({characters, currentId, setCurrentId}) {
         const currentIndex: number = characters.findIndex((c: Character) => c.id == currentId);
         const nextIndex: number = (currentIndex + 1) % characters.length;
         setCurrentId(characters[nextIndex].id);
+        updateCharacterOnTurn(characters[nextIndex].id)
     }
 
     const current: Character|null = getCurrent();

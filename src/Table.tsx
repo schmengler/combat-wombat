@@ -36,7 +36,7 @@ function Table({characters, setCharacters, currentId}) {
             </thead>
             <tbody className={tbodyClass}>
 
-            {characters.map((character: Character, index) => (
+            {characters.map((character: Character, index: number) => (
                 <CharacterRow key={character.id} isCurrent={currentId == character.id} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
 
             <tr>

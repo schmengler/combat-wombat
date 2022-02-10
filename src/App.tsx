@@ -15,7 +15,7 @@ function App() {
                 </h1>
             </header>
             <Table characters={characters} setCharacters={setCharacters} currentId={currentId}/>
-            <Actions characters={characters} currentId={currentId} setCurrentId={setCurrentId}/>
+            <Actions characters={characters} setCharacters={setCharacters} currentId={currentId} setCurrentId={setCurrentId}/>
         </div>
     )
 }
