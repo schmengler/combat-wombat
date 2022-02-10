@@ -1,7 +1,6 @@
 import {Modifier} from "./Modifier";
 
-export class Character
-{
+export class Character {
     private static nextId = 1;
 
     public id: number;
@@ -21,7 +20,10 @@ export class Character
     public noParryRounds: number = 0;
 
     public dizzyRounds: number = 0;
+
     public diesInRounds: number = 0;
+
+    public isDead: boolean = false;
 
     constructor(name: string, ini: number) {
         this.id = Character.nextId++;
@@ -29,10 +31,33 @@ export class Character
         this.ini = ini;
     }
 
-    turn()
-    {
+    /**
+     * Returns new instance with updated stats before new turn
+     */
+    turn() {
+        //TODO extract => Modifier Collection Prototype
+        function turnModifiers(modifiers: Modifier[]): Modifier[] {
+            return modifiers.map(
+                (m: Modifier) => Object.assign(new Modifier(), m, {rounds: m.rounds - 1})
+            ).filter(
+                (m: Modifier) => m.rounds > 0
+            )
+        }
+        //TODO extract => clone component
         const clone = Object.assign(new Character('', 0), this);
+
         clone.hits += clone.bleeding;
+        clone.noParryRounds = Math.max(0, clone.noParryRounds - 1);
+        clone.dizzyRounds = Math.max(0, clone.dizzyRounds - 1);
+        clone.diesInRounds = Math.max(0, clone.diesInRounds - 1);
+        clone.boniOrMali = turnModifiers(clone.boniOrMali);
+        clone.parryWithMali = turnModifiers(clone.parryWithMali);
+
+        if (clone.diesInRounds == 0 && this.diesInRounds > 0) {
+            //TODO handle state in Checkbox component
+            clone.isDead = true;
+        }
+
         return clone;
     }
 }
