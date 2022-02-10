@@ -7,8 +7,9 @@ function Actions({characters, setCharacters, currentId, setCurrentId}) {
     const updateCharacterOnTurn = (characterId: number) => {
         setCharacters((prev: Character[]) => {
             const index = prev.findIndex((c: Character) => c.id == characterId)
-            prev[index] = prev[index].turn();
-            return [...prev];
+            const clone = [...prev];
+            clone[index] = clone[index].turn();
+            return clone;
         })
     }
 

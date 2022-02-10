@@ -19,8 +19,9 @@ function CharacterRow({isEven, isCurrent, characters, setCharacters, characterId
     const setEntity = (update: (current: Character) => Character) => {
         setCharacters((prev: Character[]) => {
             const index = prev.findIndex((c: Character) => c.id == characterId)
-            prev[index] = update(prev[index]);
-            return [...prev];
+            const clone = [...prev];
+            clone[index] = update(clone[index]);
+            return clone;
         })
     }
 

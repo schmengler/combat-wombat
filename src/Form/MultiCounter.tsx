@@ -75,7 +75,7 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
                 {useWoundType && (
                     <fieldset>
                         {Object.entries(WoundType).map((entry) =>
-                            <label className={"block py-2 cursor-pointer"}>
+                            <label key={entry[0]} className={"block py-2 cursor-pointer"}>
                                 <input name={"woundType"} value={entry[0]} type={"radio"}
                                        checked={newModifier.woundType == entry[1]}
                                        onChange={handleChangeWoundType}
