@@ -26,7 +26,7 @@ function CharacterRow({isEven, isCurrent, characters, setCharacters, characterId
 
     return (
         <tr className={trClass}>
-            <td className={tdClass}><Remove/> {entity.name}</td>
+            <td className={tdClass}><Remove setCharacters={setCharacters} characterId={characterId}/> {entity.name}</td>
             <td className={tdClass}><Text entity={entity} setEntity={setEntity} property={"ini"} /></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
