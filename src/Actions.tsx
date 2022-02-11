@@ -10,7 +10,7 @@ function Actions({characters, setCharacters, currentId, setCurrentId, characterT
             const index = allCharacters.findIndex((c: Character) => c.id == characterId)
             const updatedCharacters = [...allCharacters];
             if (updatedCharacters[prevIndex]) {
-                updatedCharacters[prevIndex] = updatedCharacters[prevIndex].afterTurn();
+                updatedCharacters[prevIndex] = updatedCharacters[prevIndex].afterTurn(allCharacters);
             }
             updatedCharacters[index] = updatedCharacters[index].beforeTurn(allCharacters);
             setCurrentId(characterId);

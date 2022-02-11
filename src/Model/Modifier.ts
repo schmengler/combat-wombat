@@ -21,8 +21,13 @@ export class Modifier {
         return this.rounds == 0;
     }
 
-    isInflictedBy(character: Character) {
+    isInflictedBy(character: Character): boolean {
         return character.id == this.inflictedByCharacterId;
+    }
+
+    isInflictedByAny(characters: Character[]): boolean {
+        const characterIds: number[] = characters.map((c: Character): number => c.id);
+        return this.inflictedByCharacterId !== null && characterIds.includes(this.inflictedByCharacterId);
     }
 
     /**

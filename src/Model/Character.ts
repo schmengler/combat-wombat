@@ -39,11 +39,18 @@ export class Character {
         this.ini = ini;
     }
 
-    private turnModifiers(modifiers: Modifier[], ifInflictedBy: Character): Modifier[] {
+    /**
+     * Return updated modifiers on turn change
+     *
+     * @param modifiers     current modifiers
+     * @param condition     only update modifiers passing this condition
+     * @private
+     */
+    private turnModifiers(modifiers: Modifier[], condition: (m: Modifier) => boolean): Modifier[] {
         return modifiers.map(
             (m: Modifier) => Modifier.clone(m)
         ).map(
-            (m: Modifier) => (m.isInflictedBy(ifInflictedBy) && m.isNotFresh()) ? m.withRounds(-1) : m
+            (m: Modifier) => condition(m) ? m.withRounds(-1) : m
         ).map(
             (m: Modifier) => m.withFresh(false)
         ).filter(
@@ -53,6 +60,8 @@ export class Character {
 
     /**
      * Returns new instance with updated stats before new turn
+     *
+     * @param characters All characters, modifiers of other characters will be updated if inflicted by current character
      */
     beforeTurn(characters: Character[]) {
         const clone = Character.clone(this);
@@ -61,8 +70,8 @@ export class Character {
             (c: Character) => c.id !== clone.id
         ).forEach(
             (other: Character) => {
-                other.boniOrMali = this.turnModifiers(other.boniOrMali, clone);
-                other.parryWithMali = this.turnModifiers(other.parryWithMali, clone);
+                other.boniOrMali = this.turnModifiers(other.boniOrMali, (m: Modifier) => m.isInflictedBy(clone));
+                other.parryWithMali = this.turnModifiers(other.parryWithMali, (m: Modifier) => m.isInflictedBy(clone));
             }
         );
         //TODO refactor those two into Modifiers, call turnModifiers(other.x) as above
@@ -79,10 +88,19 @@ export class Character {
         return clone;
     }
 
-    afterTurn() {
-        //TODO also remove modifiers inflicted by deleted characters or "null" (before any turn)
+    afterTurn(characters: Character[]) {
         const clone = Character.clone(this);
-        clone.boniOrMali = this.turnModifiers(clone.boniOrMali, clone);
+        /**
+         * After own turn, all not-fresh self-inflicted modifiers and modifiers where the inflicting character does not exist are updated
+         */
+        clone.boniOrMali = this.turnModifiers(
+            clone.boniOrMali,
+            (m: Modifier) => (m.isInflictedBy(clone) && m.isNotFresh()) || !m.isInflictedByAny(characters)
+        );
+        clone.parryWithMali = this.turnModifiers(
+            clone.parryWithMali,
+            (m: Modifier) => (m.isInflictedBy(clone) && m.isNotFresh()) || !m.isInflictedByAny(characters)
+        );
 
         return clone;
     }
