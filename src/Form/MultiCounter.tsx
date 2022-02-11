@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import PropTypes from 'prop-types';
 import {Character} from "../Model/Character";
 import {Modifier} from "../Model/Modifier";
@@ -11,10 +11,13 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
 
     const [newModifier, setNewModifier] = useState(new Modifier());
 
-    const handleChangeWoundType = (event: React.ChangeEvent<HTMLInputElement>) => setNewModifier((value: Modifier) => {
-        value.woundType = WoundType[event.target.value as keyof typeof WoundType];
-        return Object.assign(Object.create(Object.getPrototypeOf(value)), value);
-    });
+    const handleChangeWoundType = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewModifier((value: Modifier) => {
+            const clone = Object.assign(new Modifier(), value);
+            clone.woundType = WoundType[event.target.value as keyof typeof WoundType];
+            return clone;
+        });
+    };
     const handleAddModifier = (event: React.MouseEvent<HTMLButtonElement>) => {
         setEntity((value: Character) => {
             if (newModifier.isEmpty()) {
@@ -38,12 +41,33 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
         return clone;
     });
 
+    const detailsRef = useRef(null);
+    const onClickOutside = () => {setDetailsShown(false)};
+    useEffect(() => {
+        const handleClickOutside = (event: React.MouseEvent) => {
+            // @ts-ignore
+            if (detailsRef.current && !detailsRef.current.contains(event.target)) {
+                onClickOutside && onClickOutside();
+            }
+        };
+        // @ts-ignore
+        document.addEventListener('click', handleClickOutside, true);
+        return () => {
+            // @ts-ignore
+            document.removeEventListener('click', handleClickOutside, true);
+        };
+    }, [ onClickOutside ]);
+
+
     return (
         <div className="h-full w-full relative cursor-help">
             <div className={"h-full w-full text-2xl"}  onClick={() => setDetailsShown((shown) => !shown)}>
                 {entity[property].reduce((prev: number, current: Modifier) => prev + current.value, 0)}
             </div>
-            <div hidden={!detailsShown} className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow text-left"}>
+            <div ref={detailsRef}
+                hidden={!detailsShown}
+                className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow text-left"}
+            >
                 <ol>
                     {entity[property].map((modifier: Modifier) => (
                         <li className={"text-xl"}>
@@ -70,19 +94,32 @@ function MultiCounter({entity, property, setEntity, minValue = Number.MIN_SAFE_I
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 11l7-7 7 7M5 19l7-7 7 7"/>
                     </svg>
                 </button>
-                <strong>Runden</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} minValue={0} />
-                <strong>Bonus/Malus</strong> <Counter entity={newModifier} setEntity={setNewModifier} property={"value"} useBigSteps={true} invertColors={invertColors} />
-                {useWoundType && (
-                    <fieldset>
-                        {Object.entries(WoundType).map((entry) =>
-                            <label key={entry[0]} className={"block py-2 cursor-pointer"}>
-                                <input name={"woundType"} value={entry[0]} type={"radio"}
-                                       checked={newModifier.woundType == entry[1]}
-                                       onChange={handleChangeWoundType}
-                                       className={"text-amber-600 focus:ring-amber-400"}/> {entry[1]}
-                            </label>)}
-                    </fieldset>
-                )}
+                <table>
+                    <thead>
+                        <tr>
+                            <th className={"font-bold text-center"}>Runden</th>
+                            <th className={"font-bold text-center"}>Bonus/Malus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} minValue={0} /></td>
+                            <td><Counter entity={newModifier} setEntity={setNewModifier} property={"value"} useBigSteps={true} invertColors={invertColors} /></td>
+                        </tr>
+                    </tbody>
+
+                    {useWoundType && (
+                        <fieldset>
+                            {Object.entries(WoundType).map((entry) =>
+                                <label key={entry[0]} className={"block py-2 cursor-pointer"}>
+                                    <input name={"woundType"} value={entry[0]} type={"radio"}
+                                           // checked={newModifier.woundType == entry[1]}
+                                           onChange={handleChangeWoundType}
+                                           className={"text-amber-600 focus:ring-amber-400"}/> {entry[1]}
+                                </label>)}
+                        </fieldset>
+                    )}
+                </table>
             </div>
         </div>
     )
