@@ -2,8 +2,13 @@ import {Character} from "../Model/Character";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 
-// @ts-ignore
-function Add({setCharacters}) {
+interface AddProps
+{
+    characters: Character[],
+    setCharacters: (update: (current: Character[]) => Character[]) => void
+}
+
+function Add({characters, setCharacters}: AddProps) {
 
     const addCharacters = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -16,7 +21,25 @@ function Add({setCharacters}) {
         const count: number = Number.parseInt(matches[1]) || 1;
         const name: string = matches[2];
         const ini: number = Number.parseInt(matches[3]) || 0;
-        const added : Character[] = Array.from({length: count}, (x, i) => new Character(name + (count > 1 ? ' ' + (i + 1) : ''), ini));
+
+        const lastNumberForName = characters.map(
+            (c: Character) => c.name.match(new RegExp('^' + name + '(?: (\\d+))?'))
+        ).filter(
+            (match: RegExpMatchArray | null): boolean => match !== null
+        ).map(
+            // @ts-ignore TS does not understand that null is not possible here
+            (match: RegExpMatchArray): number => parseInt(match[1]) || 1
+        ).sort(
+            (a: number, b: number): number => a - b
+        ).pop() || 0;
+
+        const added: Character[] = Array.from(
+            {length: count},
+            (x, i: number) => new Character(
+                name + (count + lastNumberForName > 1 ? ' ' + (lastNumberForName + 1 + i) : ''),
+                ini
+            )
+        );
         setCharacters((prev: Character[]) => [...prev, ...added]);
         inputElement.value = '';
     }

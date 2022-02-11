@@ -48,7 +48,7 @@ function Table({characters, setCharacters, currentId, setCurrentId}) {
             <tfoot className={tfootClass}>
                 <tr>
                     <td className={tdClass} colSpan={7}>
-                        <Add setCharacters={setCharacters}/>
+                        <Add characters={characters} setCharacters={setCharacters}/>
                     </td>
                     <td className={tdClass} colSpan={7}>
                         <Actions characters={characters} characterTable={characterTable} setCharacters={setCharacters} currentId={currentId} setCurrentId={setCurrentId}/>
