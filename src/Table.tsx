@@ -42,7 +42,7 @@ function Table({characters, setCharacters, currentId, setCurrentId}) {
             <tbody className={tbodyClass} ref={characterTable}>
 
             {characters.map((character: Character, index: number) => (
-                <CharacterRow tdClass={tdClass} key={character.id} isCurrent={currentId == character.id} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
+                <CharacterRow tdClass={tdClass} key={character.id} isCurrent={currentId == character.id} currentId={currentId} isEven={index %2 == 0} characters={characters} setCharacters={setCharacters} characterId={character.id}/>))}
 
             </tbody>
             <tfoot className={tfootClass}>

@@ -4,16 +4,20 @@ import {Character} from "./Model/Character";
 function Actions({characters, setCharacters, currentId, setCurrentId, characterTable}) {
 
     // from CharacterRow, common parts should be extracted
-    const updateCharacterOnTurn = (characterId: number) => {
-        setCharacters((prev: Character[]) => {
-            const index = prev.findIndex((c: Character) => c.id == characterId)
-            const clone = [...prev];
-            clone[index] = clone[index].turn();
-            setCurrentId(characterId);
-            if (!clone[index].canAct()) {
-                updateCharacterOnTurn(clone[(index + 1) % clone.length].id);
+    const updateCharacterOnTurn = (characterId: number, prevCharacterId: number) => {
+        setCharacters((allCharacters: Character[]) => {
+            const prevIndex = allCharacters.findIndex((c: Character) => c.id == prevCharacterId)
+            const index = allCharacters.findIndex((c: Character) => c.id == characterId)
+            const updatedCharacters = [...allCharacters];
+            if (updatedCharacters[prevIndex]) {
+                updatedCharacters[prevIndex] = updatedCharacters[prevIndex].afterTurn();
             }
-            return clone;
+            updatedCharacters[index] = updatedCharacters[index].beforeTurn(allCharacters);
+            setCurrentId(characterId);
+            if (!updatedCharacters[index].canAct()) {
+                updateCharacterOnTurn(updatedCharacters[(index + 1) % updatedCharacters.length].id, characterId);
+            }
+            return updatedCharacters;
         });
         characterTable.current.querySelector('tr[data-character-id="'+characterId+'"]').scrollIntoView({
             behavior: 'smooth',
@@ -22,12 +26,12 @@ function Actions({characters, setCharacters, currentId, setCurrentId, characterT
 
     }
 
-    function getCurrent(): Character|null
+    function getCurrent(): Character
     {
         if (currentId == null && characters.length > 0) {
             return new Character("Niemand", 0);
         } else {
-            return characters.find((c: Character) => c.id == currentId) || null;
+            return characters.find((c: Character) => c.id == currentId) || new Character("Niemand", 0);
         }
     }
 
@@ -37,12 +41,12 @@ function Actions({characters, setCharacters, currentId, setCurrentId, characterT
         }
         const currentIndex: number = characters.findIndex((c: Character) => c.id == currentId);
         const nextIndex: number = (currentIndex + 1) % characters.length;
-        updateCharacterOnTurn(characters[nextIndex].id)
+        updateCharacterOnTurn(characters[nextIndex].id, currentId)
     }
 
-    const current: Character|null = getCurrent();
+    const current: Character = getCurrent();
 
-    return current && (
+    return (
         <div className={"container mx-auto"}>
             <span className={"text-2xl px-6"}>An der Reihe: <span className={"font-bold"}>{current.name}</span></span>
             <button type="button"

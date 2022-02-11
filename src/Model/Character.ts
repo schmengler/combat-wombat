@@ -27,7 +27,7 @@ export class Character {
 
     public disarmed: boolean = false;
 
-    public conciousless: boolean = false;
+    public consciousness: boolean = false;
 
     public dead: boolean = false;
 
@@ -39,27 +39,38 @@ export class Character {
         this.ini = ini;
     }
 
+    private turnModifiers(modifiers: Modifier[], ifInflictedBy: Character): Modifier[] {
+        return modifiers.map(
+            (m: Modifier) => Modifier.clone(m)
+        ).map(
+            (m: Modifier) => (m.isInflictedBy(ifInflictedBy) && m.isNotFresh()) ? m.withRounds(-1) : m
+        ).map(
+            (m: Modifier) => m.withFresh(false)
+        ).filter(
+            (m: Modifier) => m.rounds > 0
+        )
+    }
+
     /**
      * Returns new instance with updated stats before new turn
      */
-    turn() {
-        //TODO extract => Modifier Collection Prototype
-        function turnModifiers(modifiers: Modifier[]): Modifier[] {
-            return modifiers.map(
-                (m: Modifier) => Object.assign(new Modifier(), m, {rounds: m.rounds - 1})
-            ).filter(
-                (m: Modifier) => m.rounds > 0
-            )
-        }
-        //TODO extract => clone component
-        const clone = Object.assign(new Character('', 0), this);
+    beforeTurn(characters: Character[]) {
+        const clone = Character.clone(this);
 
-        clone.hits += clone.bleeding;
+        characters.filter(
+            (c: Character) => c.id !== clone.id
+        ).forEach(
+            (other: Character) => {
+                other.boniOrMali = this.turnModifiers(other.boniOrMali, clone);
+                other.parryWithMali = this.turnModifiers(other.parryWithMali, clone);
+            }
+        );
+        //TODO refactor those two into Modifiers, call turnModifiers(other.x) as above
         clone.noParryRounds = Math.max(0, clone.noParryRounds - 1);
         clone.dizzyRounds = Math.max(0, clone.dizzyRounds - 1);
+
+        clone.hits += clone.bleeding;
         clone.diesInRounds = Math.max(0, clone.diesInRounds - 1);
-        clone.boniOrMali = turnModifiers(clone.boniOrMali);
-        clone.parryWithMali = turnModifiers(clone.parryWithMali);
 
         if (clone.diesInRounds == 0 && this.diesInRounds > 0) {
             clone.dead = true;
@@ -68,7 +79,22 @@ export class Character {
         return clone;
     }
 
+    afterTurn() {
+        //TODO also remove modifiers inflicted by deleted characters or "null" (before any turn)
+        const clone = Character.clone(this);
+        clone.boniOrMali = this.turnModifiers(clone.boniOrMali, clone);
+
+        return clone;
+    }
+
     canAct(): boolean {
-        return !this.dead && !this.conciousless;
+        return !this.dead && !this.consciousness;
+    }
+
+    /**
+     * Returns new instance with ensured type casting
+     */
+    private static clone(from: Character) {
+        return Object.assign(new Character('', 0), from)
     }
 }
