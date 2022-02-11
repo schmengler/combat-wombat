@@ -81,8 +81,8 @@ function MultiCounter(
     const propertyValue: Modifier[] = entity[property];
 
     return (
-        <div className="h-full w-full relative cursor-help">
-            <div className={"h-full w-full text-2xl"} onClick={() => setDetailsShown((shown) => !shown)}>
+        <div className="w-full h-12 relative cursor-help">
+            <div className={"w-full h-full flex items-center justify-center"} onClick={() => setDetailsShown((shown) => !shown)}>
                 {propertyValue.reduce((prev: number, current: Modifier) => prev + current.value, 0)}
             </div>
             <div ref={detailsRef}

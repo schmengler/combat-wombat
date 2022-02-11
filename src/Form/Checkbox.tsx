@@ -12,8 +12,8 @@ function Checkbox({entity, setEntity, property}) {
     }
 
     return (
-        <div className={"w-full relative"}>
-            <label className="select-none container block relative cursor-pointer text-xl pl-8 left-1/2 -ml-4">
+        <div className={"w-full relative flex justify-center align-center"}>
+            <label className="select-none container block relative cursor-pointer text-xl pl-8 left-1/2 -mt-2 -ml-4">
                 <input className="absolute opacity-0 left-0 top-0 cursor-pointer" type="checkbox" checked={entity[property]} onChange={handleChange} />
                     <span className="h-6 w-6 checkmark absolute top-0 left-0 bg-amber-100" />
             </label>

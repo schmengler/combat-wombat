@@ -44,32 +44,17 @@ function Actions({characters, setCharacters, currentId, setCurrentId, characterT
         updateCharacterOnTurn(characters[nextIndex].id, currentId)
     }
 
-    function reset() {
-        if (confirm('Alles löschen?')) {
-            setCharacters([]);
-            setCurrentId(null);
-        }
-    }
-
     const current: Character = getCurrent();
 
     return (
-        <div className={"container mx-auto"}>
-            <span className={"text-2xl px-6"}>An der Reihe: <span className={"font-bold"}>{current.name}</span></span>
+        <div className={"text-left inline-block"}>
             <button type="button"
                     className="inline-block px-7 py-3 bg-amber-600 text-white font-bold text-xl leading-snug uppercase rounded shadow-md hover:bg-amber-700 hover:shadow-lg focus:bg-amber-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-amber-800 active:shadow-lg transition duration-150 ease-in-out"
                     onClick={next}
             >
                 Nächster!
             </button>
-            <button type="button"
-                    className="ml-6 inline-block px-7 py-3 bg-red-600 text-white font-bold text-xl leading-snug uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
-                    onClick={reset}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
+            <span className={"text-2xl px-6"}>An der Reihe: <span className={"font-bold"}>{current.name}</span></span>
             {/*TODO: load/save as text file ? */}
         </div>
     )

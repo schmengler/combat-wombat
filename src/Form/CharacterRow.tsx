@@ -1,14 +1,24 @@
 import Remove from "./Remove";
-import Text from "./Text";
+import NumberInput from "./NumberInput";
 import Counter from "./Counter";
 import MultiCounter from "./MultiCounter";
 import Checkbox from "./Checkbox";
 import {Character} from "../Model/Character";
 import Textarea from "./Textarea";
 import ModifierCounter from "./ModifierCounter";
+import {MutableRefObject} from "react";
 
-// @ts-ignore
-function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCharacters, characterId}) {
+interface RowProps  {
+    tdClass: string,
+    isEven: boolean,
+    isCurrent: boolean,
+    currentId: number,
+    characters: Character[],
+    setCharacters: (update: (current: Character[]) => Character[]) => void,
+    characterId: number,
+}
+
+function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCharacters, characterId}: RowProps) {
 
     const characterIndex = characters.findIndex((c: Character) => c.id == characterId)
     const entity = characters[characterIndex];
@@ -41,9 +51,9 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
     return (
         <tr className={trClass} data-character-id={characterId}>
             <td className={tdClass + "overflow-hidden"}>
-                <Remove setCharacters={setCharacters} characterId={characterId}/>
-                <div className={"inline-block font-bold text-lg -rotate-90"}>{entity.name}</div></td>
-            <td className={tdClass}><Text entity={entity} setEntity={setEntity} property={"ini"} /></td>
+                <div className={"inline-block font-bold text-lg"}>{entity.name}</div>
+            </td>
+            <td className={tdClass}><NumberInput entity={entity} setEntity={setEntity} property={"ini"} /></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
             <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>
@@ -55,7 +65,8 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"consciousness"}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"diesInRounds"} minValue={0}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"dead"}/></td>
-            <td className={tdClass}><Textarea entity={entity} setEntity={setEntity} property={"notes"} /></td>
+            <td className={tdClass}><Textarea entity={entity} setEntity={setEntity} property={"notes"}/></td>
+            <td className={tdClass}><Remove setCharacters={setCharacters} characterId={characterId}/></td>
         </tr>
     );
 }

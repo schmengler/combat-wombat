@@ -81,7 +81,7 @@ function GenericCounter<EntityType, PropertyType>(
                 <button
                     className="bg-amber-100 text-amber-600 hover:text-amber-700 hover:bg-amber-200 h-full w-10 rounded-r cursor-pointer"
                     onClick={increase()} onBlur={hideButtons}>
-                    <span className="m-auto text-2xl font-thin">+</span>
+                    <span className="m-auto text-md font-thin">+</span>
                 </button>
                 <input type="number" ref={counterInput}
                        className="outline-none focus:outline-none text-center w-10 bg-amber-100 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-amber-700  outline-none border-0 focus:ring-0 px-0 text-sm"
@@ -89,7 +89,7 @@ function GenericCounter<EntityType, PropertyType>(
                 <button
                     className=" bg-amber-100 text-amber-600 hover:text-amber-700 hover:bg-amber-200 h-full w-10 rounded-l cursor-pointer outline-none"
                     onClick={decrease()} onBlur={hideButtons}>
-                    <span className="m-auto text-2xl font-thin">−</span>
+                    <span className="m-auto text-md font-thin">−</span>
                 </button>
                 <div ref={buttonInputs} hidden={!inputShown || !useBigSteps} className={"absolute bg-amber-100 left-full p-2 z-10 drop-shadow"}>
                     <button

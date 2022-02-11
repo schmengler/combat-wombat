@@ -1,7 +1,7 @@
 import {useRef} from "react";
 
 // @ts-ignore
-function Text({entity, property, setEntity})
+function NumberInput({entity, property, setEntity})
 {
     const form : React.MutableRefObject<HTMLFormElement|null> = useRef(null);
 
@@ -18,7 +18,7 @@ function Text({entity, property, setEntity})
 
     return (
         <form onSubmit={handleChange} ref={form}>
-            <input type={"text"} name={property} defaultValue={entity[property]}
+            <input type={"number"} name={property} defaultValue={entity[property]}
                className={"w-12"}
                onBlur={submitForm}
         />
@@ -26,4 +26,4 @@ function Text({entity, property, setEntity})
     );
 }
 
-export default Text;
+export default NumberInput;
