@@ -55,6 +55,8 @@ function Actions({characters, setCharacters, currentId, setCurrentId, characterT
             >
                 Nächster!
             </button>
+            {/*TODO: reset button*/}
+            {/*TODO: load/save as text file ? */}
         </div>
     )
 }

@@ -43,6 +43,7 @@ function MultiCounter({entity, property, setEntity, characters, currentId,
             // clone to prevent side effects from double update
             const clone = Object.assign(new Character("", 0), value)
             const modifier = Object.assign(new Modifier(characterId), newModifier);
+            //TODO make this reusable in ModifierCounter:
             const inflictingCharacter = getCurrent();
             modifier.inflictedByCharacterId = inflictingCharacter.id;
             setNewModifier(new Modifier(characterId));

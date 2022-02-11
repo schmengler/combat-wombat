@@ -5,6 +5,7 @@ import MultiCounter from "./MultiCounter";
 import Checkbox from "./Checkbox";
 import {Character} from "../Model/Character";
 import Textarea from "./Textarea";
+import ModifierCounter from "./ModifierCounter";
 
 // @ts-ignore
 function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCharacters, characterId}) {
@@ -36,8 +37,8 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
             <td className={tdClass}><MultiCounter entity={entity} characters={characters} currentId={currentId} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>
             <td className={tdClass}><MultiCounter entity={entity} characters={characters} currentId={currentId} setEntity={setEntity} property={"parryWithMali"}/></td>
-            <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"noParryRounds"} minValue={0}/></td>
-            <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"dizzyRounds"} minValue={0}/></td>
+            <td className={tdClass}><ModifierCounter entity={entity} setEntity={setEntity} property={"noParry"} minValue={0}/></td>
+            <td className={tdClass}><ModifierCounter entity={entity} setEntity={setEntity} property={"dizzy"} minValue={0}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"disarmed"}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"onGround"}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"consciousness"}/></td>
