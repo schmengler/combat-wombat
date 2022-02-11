@@ -1,32 +1,29 @@
 import {useEffect, useRef, useState} from "react";
-import PropTypes from 'prop-types';
 import {Character} from "../Model/Character";
 import {Modifier} from "../Model/Modifier";
 import Counter from "./Counter";
 import {WoundType} from "../Model/WoundType";
 
-// @ts-ignore
-function MultiCounter({entity, property, setEntity, characters, currentId,
-                          minValue = Number.MIN_SAFE_INTEGER,
-                          invertColors = true,
-                          useWoundType = false
-                      }) {
+interface CounterProps<EntityType,PropertyType> {
+    entity: EntityType,
+    property: keyof EntityType,
+    getCurrentCharacter: () => Character,
+    setEntity: (update: (current: EntityType) => EntityType) => void,
+    invertColors?: boolean,
+    useWoundType?: boolean
+}
 
-    const characterId = (entity as Character).id;
+function MultiCounter(
+    {
+        entity, property, setEntity, getCurrentCharacter,
+        invertColors = true,
+        useWoundType = false
+    }: CounterProps<Character, Modifier[]>
+) {
+
+    const characterId = entity.id;
     const [detailsShown, setDetailsShown] = useState(false);
     const [newModifier, setNewModifier] = useState(new Modifier(characterId));
-
-    /**
-     * return current character, assume self if not set
-     */
-    function getCurrent(): Character {
-        if (currentId == null && characters.length > 0) {
-            return entity;
-        } else {
-            return characters.find((c: Character) => c.id == currentId) || entity;
-        }
-    }
-
 
     const handleChangeWoundType = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewModifier((value: Modifier) => {
@@ -43,9 +40,7 @@ function MultiCounter({entity, property, setEntity, characters, currentId,
             // clone to prevent side effects from double update
             const clone = Object.assign(new Character("", 0), value)
             const modifier = Object.assign(new Modifier(characterId), newModifier);
-            //TODO make this reusable in ModifierCounter:
-            const inflictingCharacter = getCurrent();
-            modifier.inflictedByCharacterId = inflictingCharacter.id;
+            modifier.inflictedByCharacterId = getCurrentCharacter().id;
             setNewModifier(new Modifier(characterId));
             // @ts-ignore
             clone[property] = [...clone[property], modifier];
@@ -61,6 +56,7 @@ function MultiCounter({entity, property, setEntity, characters, currentId,
         return clone;
     });
 
+    // close details on click outside:
     const detailsRef = useRef(null);
     const onClickOutside = () => {
         setDetailsShown(false)
@@ -81,17 +77,20 @@ function MultiCounter({entity, property, setEntity, characters, currentId,
     }, [onClickOutside]);
 
 
+    // @ts-ignore (we have to trust that entity[property] actually matches PropertyType
+    const propertyValue: Modifier[] = entity[property];
+
     return (
         <div className="h-full w-full relative cursor-help">
             <div className={"h-full w-full text-2xl"} onClick={() => setDetailsShown((shown) => !shown)}>
-                {entity[property].reduce((prev: number, current: Modifier) => prev + current.value, 0)}
+                {propertyValue.reduce((prev: number, current: Modifier) => prev + current.value, 0)}
             </div>
             <div ref={detailsRef}
                  hidden={!detailsShown}
                  className={"absolute bg-amber-100 top-10 p-2 z-10 drop-shadow text-left"}
             >
                 <ol>
-                    {entity[property].map((modifier: Modifier, index: number) => (
+                    {propertyValue.map((modifier: Modifier, index: number) => (
                         <li className={"text-xl"} key={index}>
                             <button className={"inline-block text-orange-400"}
                                     onClick={handleRemoveModifier(modifier)}>
@@ -153,13 +152,6 @@ function MultiCounter({entity, property, setEntity, characters, currentId,
             </div>
         </div>
     )
-}
-
-MultiCounter.propTypes = {
-    property: PropTypes.string,
-    minValue: PropTypes.number,
-    invertColors: PropTypes.bool,
-    useWoundType: PropTypes.bool,
 }
 
 export default MultiCounter

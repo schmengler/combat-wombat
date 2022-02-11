@@ -6,13 +6,14 @@ function Actions({characters, setCharacters, currentId, setCurrentId, characterT
     // from CharacterRow, common parts should be extracted
     const updateCharacterOnTurn = (characterId: number, prevCharacterId: number) => {
         setCharacters((allCharacters: Character[]) => {
-            const prevIndex = allCharacters.findIndex((c: Character) => c.id == prevCharacterId)
-            const index = allCharacters.findIndex((c: Character) => c.id == characterId)
-            const updatedCharacters = [...allCharacters];
+            // clone all to prevent double update, because others are affected by beforeTurn() as well
+            const updatedCharacters = allCharacters.map(Character.clone);
+            const prevIndex = updatedCharacters.findIndex((c: Character) => c.id == prevCharacterId)
+            const index = updatedCharacters.findIndex((c: Character) => c.id == characterId)
             if (updatedCharacters[prevIndex]) {
-                updatedCharacters[prevIndex] = updatedCharacters[prevIndex].afterTurn(allCharacters);
+                updatedCharacters[prevIndex] = updatedCharacters[prevIndex].afterTurn(updatedCharacters);
             }
-            updatedCharacters[index] = updatedCharacters[index].beforeTurn(allCharacters);
+            updatedCharacters[index] = updatedCharacters[index].beforeTurn(updatedCharacters);
             setCurrentId(characterId);
             if (!updatedCharacters[index].canAct()) {
                 updateCharacterOnTurn(updatedCharacters[(index + 1) % updatedCharacters.length].id, characterId);

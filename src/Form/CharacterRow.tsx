@@ -21,6 +21,17 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
         })
     }
 
+    /**
+     * Return current turn character, assume self if not set
+     */
+    const getCurrentCharacter = (): Character => {
+        if (currentId == null && characters.length > 0) {
+            return entity;
+        } else {
+            return characters.find((c: Character) => c.id == currentId) || entity;
+        }
+    };
+
     const trClassOdd = "hover:bg-orange-50 dark:hover:bg-amber-700";
     const trClassEven = "bg-amber-50 hover:bg-orange-50 dark:hover:bg-amber-700";
     const trCurrent = " bg-green-50";
@@ -35,10 +46,10 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
             <td className={tdClass}><Text entity={entity} setEntity={setEntity} property={"ini"} /></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
-            <td className={tdClass}><MultiCounter entity={entity} characters={characters} currentId={currentId} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>
-            <td className={tdClass}><MultiCounter entity={entity} characters={characters} currentId={currentId} setEntity={setEntity} property={"parryWithMali"}/></td>
-            <td className={tdClass}><ModifierCounter entity={entity} setEntity={setEntity} property={"noParry"} minValue={0}/></td>
-            <td className={tdClass}><ModifierCounter entity={entity} setEntity={setEntity} property={"dizzy"} minValue={0}/></td>
+            <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>
+            <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"parryWithMali"}/></td>
+            <td className={tdClass}><ModifierCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"noParry"} minValue={0}/></td>
+            <td className={tdClass}><ModifierCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"dizzy"} minValue={0}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"disarmed"}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"onGround"}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"consciousness"}/></td>

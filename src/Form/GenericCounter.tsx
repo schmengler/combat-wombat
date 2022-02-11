@@ -11,6 +11,7 @@ interface CounterProps<EntityType, PropertyType> {
     invertColors: boolean,
     useBigSteps: boolean
 }
+
 function GenericCounter<EntityType, PropertyType>(
     {
         entity, property, setEntity,

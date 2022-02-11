@@ -21,16 +21,6 @@ export class Character {
 
     public dizzy: Modifier;
 
-    /**
-     * @deprecated use noParry instead
-     */
-    public noParryRounds: number = 0;
-
-    /**
-     * @deprecated use dizzy instead
-     */
-    public dizzyRounds: number = 0;
-
     public diesInRounds: number = 0;
 
     public onGround: boolean = false;
@@ -80,11 +70,11 @@ export class Character {
     private static turnModifier(modifier: Modifier, condition: (m: Modifier) => boolean): Modifier {
         //TODO turn into pipeline with single element, similar to turnModifiers above?
         let clone = Modifier.clone(modifier);
-        if (condition(modifier)) {
+        if (condition(clone)) {
             clone = clone.withRounds(-1);
         }
-        if (modifier.rounds == 0) {
-            clone = new Modifier(modifier.characterId);
+        if (clone.rounds <= 0) {
+            clone = new Modifier(clone.characterId);
         }
         return clone.withFresh(false);
     }
@@ -101,10 +91,14 @@ export class Character {
             (c: Character) => c.id !== clone.id
         ).forEach(
             (other: Character) => {
-                other.boniOrMali = Character.turnModifiers(other.boniOrMali, (m: Modifier) => m.isInflictedBy(clone));
-                other.parryWithMali = Character.turnModifiers(other.parryWithMali, (m: Modifier) => m.isInflictedBy(clone));
-                other.noParry = Character.turnModifier(other.noParry, (m: Modifier) => m.isInflictedBy(clone));
-                other.dizzy = Character.turnModifier(other.dizzy, (m: Modifier) => m.isInflictedBy(clone));
+                /**
+                 * All modifiers inflicted by current character are updated before their turn
+                 */
+                const inflictedByCurrentCharacter = (m: Modifier) => m.isInflictedBy(clone);
+                other.boniOrMali = Character.turnModifiers(other.boniOrMali, inflictedByCurrentCharacter);
+                other.parryWithMali = Character.turnModifiers(other.parryWithMali, inflictedByCurrentCharacter);
+                other.noParry = Character.turnModifier(other.noParry, inflictedByCurrentCharacter);
+                other.dizzy = Character.turnModifier(other.dizzy, inflictedByCurrentCharacter);
             }
         );
 
@@ -123,18 +117,13 @@ export class Character {
         /**
          * After own turn, all not-fresh self-inflicted modifiers and modifiers where the inflicting character does not exist are updated
          */
-        clone.boniOrMali = Character.turnModifiers(
-            clone.boniOrMali,
-            (m: Modifier) => (m.isInflictedBy(clone) && m.isNotFresh()) || !m.isInflictedByAny(characters)
-        );
-        clone.parryWithMali = Character.turnModifiers(
-            clone.parryWithMali,
-            (m: Modifier) => (m.isInflictedBy(clone) && m.isNotFresh()) || !m.isInflictedByAny(characters)
-        );
+        const notInflictedByOthers = (m: Modifier) => (m.isInflictedBy(clone) && m.isNotFresh()) || !m.isInflictedByAny(characters);
 
-        //TODO check inflictor as above
-        clone.dizzy = Character.turnModifier(clone.dizzy, () => true);
-        clone.noParry = Character.turnModifier(clone.noParry, () => true);
+        clone.boniOrMali = Character.turnModifiers(clone.boniOrMali, notInflictedByOthers);
+        clone.parryWithMali = Character.turnModifiers(clone.parryWithMali, notInflictedByOthers);
+
+        clone.dizzy = Character.turnModifier(clone.dizzy, notInflictedByOthers);
+        clone.noParry = Character.turnModifier(clone.noParry, notInflictedByOthers);
 
         return clone;
     }
@@ -146,7 +135,7 @@ export class Character {
     /**
      * Returns new instance with ensured type casting
      */
-    private static clone(from: Character) {
+    static clone(from: Character) {
         return Object.assign(new Character('', 0), from)
     }
 }
