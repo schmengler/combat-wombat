@@ -80,6 +80,14 @@ function MultiCounter(
     // @ts-ignore (we have to trust that entity[property] actually matches PropertyType
     const propertyValue: Modifier[] = entity[property];
 
+    const toggleInfiniteRounds = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewModifier((m: Modifier) => {
+            const clone = Modifier.clone(m);
+            clone.rounds = event.target.checked ? Infinity : 0;
+            return clone;
+        })
+    };
+
     return (
         <div className="w-full h-12 relative cursor-help">
             <div className={"w-full h-full flex items-center justify-center"} onClick={() => setDetailsShown((shown) => !shown)}>
@@ -126,10 +134,17 @@ function MultiCounter(
                     </thead>
                     <tbody>
                     <tr>
-                        <td><Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} minValue={0}/>
+                        <td className={"align-top"}>
+                            <Counter entity={newModifier} setEntity={setNewModifier} property={"rounds"} minValue={0}/>
+                            <br />
+                            <label className="select-none container block relative cursor-pointer text-xl">
+                                <input className="text-amber-600 focus:ring-amber-400" type={"checkbox"} onChange={toggleInfiniteRounds} checked={newModifier.rounds === Infinity} />
+                                ∞
+                            </label>
                         </td>
-                        <td><Counter entity={newModifier} setEntity={setNewModifier} property={"value"}
-                                     useBigSteps={true} invertColors={invertColors}/></td>
+                        <td className={"align-top text-center"}><Counter entity={newModifier} setEntity={setNewModifier} property={"value"}
+                                     useBigSteps={true} invertColors={invertColors}/>
+                        </td>
                     </tr>
                     {useWoundType && (
                         <tr>
