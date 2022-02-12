@@ -62,7 +62,7 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
             <td className={tdClass}><ModifierCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"dizzy"} minValue={0}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"disarmed"}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"onGround"}/></td>
-            <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"consciousness"}/></td>
+            <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"unconscious"}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"diesInRounds"} minValue={0}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"dead"}/></td>
             <td className={tdClass}><Textarea entity={entity} setEntity={setEntity} property={"notes"}/></td>

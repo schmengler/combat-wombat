@@ -27,7 +27,7 @@ export class Character {
 
     public disarmed: boolean = false;
 
-    public consciousness: boolean = false;
+    public unconscious: boolean = false;
 
     public dead: boolean = false;
 
@@ -129,7 +129,7 @@ export class Character {
     }
 
     canAct(): boolean {
-        return !this.dead && !this.consciousness;
+        return !this.dead && !this.unconscious;
     }
 
     /**
