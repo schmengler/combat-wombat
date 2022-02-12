@@ -11,13 +11,15 @@ interface CounterProps<EntityType,PropertyType> {
     setEntity: (update: (current: EntityType) => EntityType) => void,
     invertColors?: boolean,
     useWoundType?: boolean
+    showMarker?: boolean
 }
 
 function MultiCounter(
     {
         entity, property, setEntity, getCurrentCharacter,
         invertColors = true,
-        useWoundType = false
+        useWoundType = false,
+        showMarker = false
     }: CounterProps<Character, Modifier[]>
 ) {
 
@@ -91,6 +93,7 @@ function MultiCounter(
     return (
         <div className="w-full h-12 relative cursor-help">
             <div className={"w-full h-full flex items-center justify-center"} onClick={() => setDetailsShown((shown) => !shown)}>
+                {showMarker && propertyValue.length > 0 && (<span>✔ </span>)}
                 {propertyValue.reduce((prev: number, current: Modifier) => prev + current.value, 0)}
             </div>
             <div ref={detailsRef}

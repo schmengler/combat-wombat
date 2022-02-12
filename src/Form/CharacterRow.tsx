@@ -57,7 +57,7 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
             <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>
-            <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"parryWithMali"}/></td>
+            <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"parryWithMali"} showMarker={true}/></td>
             <td className={tdClass}><ModifierCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"noParry"} minValue={0}/></td>
             <td className={tdClass}><ModifierCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"dizzy"} minValue={0}/></td>
             <td className={tdClass}><Checkbox entity={entity} setEntity={setEntity} property={"disarmed"}/></td>
