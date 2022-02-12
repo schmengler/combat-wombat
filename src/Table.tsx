@@ -16,7 +16,7 @@ function Table({characters, setCharacters, currentId, setCurrentId}) {
 
     const characterTable = useRef(null);
 
-    const tdClass = "py-1 text-sm font-medium text-amber-900 whitespace-nowrap dark:text-white px-1 align-middle text-center border-dotted border-x border-amber-600";
+    const tdClass = "py-1 text-sm font-medium text-amber-900 whitespace-nowrap dark:text-white px-1 align-middle text-center";
 
     function reset() {
         if (confirm('Alles löschen?')) {
