@@ -42,9 +42,9 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
         }
     };
 
-    const trClassOdd = "hover:bg-orange-50 dark:hover:bg-amber-700";
-    const trClassEven = "bg-amber-50 hover:bg-orange-50 dark:hover:bg-amber-700";
-    const trCurrent = " bg-green-50";
+    const trClassOdd = "";
+    const trClassEven = "bg-amber-50";
+    const trCurrent = " bg-green-200";
     const trInactive = " bg-red-300 opacity-50";
     const trClass = (isEven ? trClassEven : trClassOdd) + (isCurrent ? trCurrent : '') + (entity.canAct() ? '' : trInactive);
 
