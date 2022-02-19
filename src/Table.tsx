@@ -4,6 +4,7 @@ import {Character} from "./Model/Character";
 import CharacterRow from "./Form/CharacterRow";
 import {MutableRefObject, useRef} from "react";
 import Save from "./Actions/Save";
+import Load from "./Actions/Load";
 
 
 // @ts-ignore
@@ -12,6 +13,7 @@ function Table({characters, setCharacters, currentId, setCurrentId}) {
     const tableClass = "min-w-full divide-y divide-amber-200 table-auto dark:divide-amber-700 w-full";
     const theadClass = "bg-amber-100 dark:bg-amber-700 w-full z-10 sticky top-0 drop-shadow";
     const thClass = "py-1 px-2 text-xs xl:text-sm font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400 h-32 rotate-180 sideways";
+    const thActionsClass = "py-1 px-2 text-xs xl:text-sm font-medium tracking-wider text-left text-amber-700 uppercase dark:text-amber-400 h-32 text-center";
     const tbodyClass = "bg-white divide-y divide-amber-200 dark:bg-amber-800 dark:divide-amber-700";
     const tfootClass = "bottom-0 sticky bg-white/80";
 
@@ -60,7 +62,10 @@ function Table({characters, setCharacters, currentId, setCurrentId}) {
                 <th scope="col" className={thClass}>stirbt in __ Runden</th>
                 <th scope="col" className={thClass}>tot</th>
                 <th scope="col" className={thClass + " w-100"}>Notizen</th>
-                <th scope="col" className={thClass}>&nbsp;</th>
+                <th scope="col" className={thActionsClass}>
+                    <Load setCharacters={setCharacters} setCurrentId={setCurrentId} />
+                    <Save characters={characters} currentId={currentId} />
+                </th>
             </tr>
             </thead>
             <tbody className={tbodyClass} ref={characterTable}>
