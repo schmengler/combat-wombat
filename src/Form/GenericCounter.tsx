@@ -83,7 +83,7 @@ function GenericCounter<EntityType, PropertyType>(
                     onClick={increase()} onBlur={hideButtons}>
                     <span className="m-auto text-md font-thin">+</span>
                 </button>
-                <input type="number" ref={counterInput}
+                <input readOnly={true} type="number" ref={counterInput}
                        className="outline-none focus:outline-none text-center w-10 bg-amber-100 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-amber-700  outline-none border-0 focus:ring-0 px-0 text-sm"
                        value={propertyValue} onClick={showButtons} onChange={handleChange} onKeyPress={handleKeyPress} onBlur={hideButtons}/>
                 <button
