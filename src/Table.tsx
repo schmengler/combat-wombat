@@ -1,8 +1,9 @@
-import Add from "./Form/Add"
+import AddCharacter from "./Actions/AddCharacter"
+import NextTurn from "./Actions/NextTurn";
 import {Character} from "./Model/Character";
 import CharacterRow from "./Form/CharacterRow";
-import Actions from "./Actions";
 import {MutableRefObject, useRef} from "react";
+import Save from "./Actions/Save";
 
 
 // @ts-ignore
@@ -75,8 +76,8 @@ function Table({characters, setCharacters, currentId, setCurrentId}) {
                 <tr>
                     <td className={tdClass} colSpan={14}>
                         <div className={"text-left"}>
-                            <Add characters={characters} setCharacters={setCharacters}/>
-                            <Actions characters={characters} characterTable={characterTable} setCharacters={setCharacters} currentId={currentId} setCurrentId={setCurrentId}/>
+                            <AddCharacter characters={characters} setCharacters={setCharacters}/>
+                            <NextTurn characters={characters} characterTable={characterTable} setCharacters={setCharacters} currentId={currentId} setCurrentId={setCurrentId}/>
                         </div>
                     </td>
                     <td className={tdClass}>
