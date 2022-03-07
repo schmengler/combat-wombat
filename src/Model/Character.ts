@@ -11,6 +11,10 @@ export class Character {
 
     public hits: number = 0;
 
+    public exhaustion: number = 0;
+
+    public exhaustionPerRound: number = 0;
+
     public bleeding: number = 0;
 
     public boniOrMali: Modifier[] = []
@@ -103,6 +107,7 @@ export class Character {
         );
 
         clone.hits += clone.bleeding;
+        clone.exhaustion += clone.exhaustionPerRound;
         clone.diesInRounds = Math.max(0, clone.diesInRounds - 1);
 
         if (clone.diesInRounds == 0 && this.diesInRounds > 0) {

@@ -56,6 +56,8 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
             <td className={tdClass}><NumberInput entity={entity} setEntity={setEntity} property={"ini"} /></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
+            <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"exhaustion"} minValue={0} useBigSteps={true}/></td>
+            <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"exhaustionPerRound"} minValue={0}/></td>
             <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"boniOrMali"} useWoundType={true} /></td>
             <td className={tdClass}><MultiCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"parryWithMali"} showMarker={true}/></td>
             <td className={tdClass}><ModifierCounter entity={entity} getCurrentCharacter={getCurrentCharacter} setEntity={setEntity} property={"noParry"} minValue={0}/></td>

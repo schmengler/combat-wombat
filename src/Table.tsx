@@ -52,6 +52,8 @@ function Table({characters, setCharacters, currentId, setCurrentId}) {
                 <th scope="col" className={thClass}>Ini</th>
                 <th scope="col" className={thClass}>Treffer</th>
                 <th scope="col" className={thClass}>Blutung / Runde</th>
+                <th scope="col" className={thClass}>Erschöpfung</th>
+                <th scope="col" className={thClass}>EP / Runde</th>
                 <th scope="col" className={thClass}>Boni/Mali</th>
                 <th scope="col" className={thClass}>Muss mit ___ parieren</th>
                 <th scope="col" className={thClass}>Runden Keine Parade</th>
