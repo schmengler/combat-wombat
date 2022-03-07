@@ -7,6 +7,7 @@ import {Character} from "../Model/Character";
 import Textarea from "./Textarea";
 import ModifierCounter from "./ModifierCounter";
 import {MutableRefObject} from "react";
+import LoseIni from "../Actions/LoseIni";
 
 interface RowProps  {
     tdClass: string,
@@ -53,7 +54,10 @@ function CharacterRow({tdClass, isEven, isCurrent, currentId, characters, setCha
             <td className={tdClass + "overflow-hidden"}>
                 <div className={"inline-block font-bold text-lg"}>{entity.name}</div>
             </td>
-            <td className={tdClass}><NumberInput entity={entity} setEntity={setEntity} property={"ini"} /></td>
+            <td className={tdClass}>
+                <NumberInput entity={entity} setEntity={setEntity} property={"originalIni"} />
+                <LoseIni setEntity={setEntity} entity={entity} getCurrentCharacter={getCurrentCharacter} />
+            </td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"hits"} minValue={0} useBigSteps={true}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"bleeding"} minValue={0}/></td>
             <td className={tdClass}><Counter entity={entity} setEntity={setEntity} property={"exhaustion"} minValue={0} useBigSteps={true}/></td>

@@ -4,26 +4,36 @@ import {Character} from "../Model/Character";
 function NextTurn({characters, setCharacters, currentId, setCurrentId, characterTable}) {
 
     // from CharacterRow, common parts should be extracted
-    const updateCharacterOnTurn = (characterId: number, prevCharacterId: number) => {
+    const updateCharacterOnTurn = (nextIndex: number, prevCharacterId: number) => {
         setCharacters((allCharacters: Character[]) => {
             // clone all to prevent double update, because others are affected by beforeTurn() as well
             const updatedCharacters = allCharacters.map(Character.clone);
+
+            // "new round" action
+            if (nextIndex === 0) {
+                updateIni(updatedCharacters)
+            }
+
+            const characterId = updatedCharacters[nextIndex].id;
             const prevIndex = updatedCharacters.findIndex((c: Character) => c.id == prevCharacterId)
-            const index = updatedCharacters.findIndex((c: Character) => c.id == characterId)
+
+            // "after turn" action
             if (updatedCharacters[prevIndex]) {
                 updatedCharacters[prevIndex] = updatedCharacters[prevIndex].afterTurn(updatedCharacters);
             }
-            updatedCharacters[index] = updatedCharacters[index].beforeTurn(updatedCharacters);
+            // "before turn" action
+            updatedCharacters[nextIndex] = updatedCharacters[nextIndex].beforeTurn(updatedCharacters);
+
             setCurrentId(characterId);
-            if (!updatedCharacters[index].canAct()) {
-                updateCharacterOnTurn(updatedCharacters[(index + 1) % updatedCharacters.length].id, characterId);
+            if (!updatedCharacters[nextIndex].canAct()) {
+                updateCharacterOnTurn((nextIndex + 1) % updatedCharacters.length, characterId);
             }
+            characterTable.current.querySelector('tr[data-character-id="'+characterId+'"]').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            })
             return updatedCharacters;
         });
-        characterTable.current.querySelector('tr[data-character-id="'+characterId+'"]').scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-        })
     }
 
     function getCurrent(): Character
@@ -35,13 +45,25 @@ function NextTurn({characters, setCharacters, currentId, setCurrentId, character
         }
     }
 
+    /**
+     * Set ini to nextRoundIni (from crits) and nextRoundIni to originalIni
+     */
+    function updateIni(updatedCharacters: Character[]): void
+    {
+        updatedCharacters.forEach((c: Character): void => {
+            [c.ini, c.nextRoundIni] = [c.nextRoundIni, c.originalIni]
+        });
+        updatedCharacters.sort((a: Character, b:Character): number => b.ini - a.ini);
+
+    }
+
     function next() {
         if (characters.length == 0) {
             return;
         }
         const currentIndex: number = characters.findIndex((c: Character) => c.id == currentId);
         const nextIndex: number = (currentIndex + 1) % characters.length;
-        updateCharacterOnTurn(characters[nextIndex].id, currentId)
+        updateCharacterOnTurn(nextIndex, currentId)
     }
 
     const current: Character = getCurrent();

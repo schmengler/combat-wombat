@@ -9,6 +9,10 @@ export class Character {
 
     public ini: number;
 
+    public nextRoundIni: number;
+
+    public originalIni: number;
+
     public hits: number = 0;
 
     public exhaustion: number = 0;
@@ -41,6 +45,8 @@ export class Character {
         this.id = Character.nextId++;
         this.name = name;
         this.ini = ini;
+        this.nextRoundIni = ini;
+        this.originalIni = ini;
         this.dizzy = new Modifier(this.id);
         this.noParry = new Modifier(this.id);
     }

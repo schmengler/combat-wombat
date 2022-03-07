@@ -33,6 +33,18 @@ function Load({setCharacters, setCurrentId}: LoadProps) {
                     try {
                         return (characters).map(
                             (data: object): Character => Object.assign(new Character('', 0), data)
+                        ).map(
+                            (character: Character): Character => {
+                                // backwards compatibility
+                                if (!character.originalIni) {
+                                    character.originalIni = character.ini
+                                }
+                                if (!character.nextRoundIni) {
+                                    character.nextRoundIni = character.ini
+                                }
+
+                                return character
+                            }
                         );
                     } catch (e) {
                         alert('Could not read characters from save file')
